@@ -13,7 +13,7 @@
 
 <ul>
     <% results.forEach(function(r) { %>
-        <li><%= r.id %> - <%= r.name %></li>
+        <li><%= r.name %> - <%= r.description %> - <%= r.color %> <% r.default_status %> <% r.link %></li>
     <% }); %>
 </ul>
 
