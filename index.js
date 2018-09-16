@@ -7,13 +7,42 @@ const pool = new Pool({
   ssl: true
 });
 
-
-
 express()
   .use(express.static(path.join(__dirname, 'public')))
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
+  .get('/login', (req, res) => res.render('pages/login'))
+  .get('/login/authentication', async (req, res) => {
+    var username = req.query.username;
+    var password = req.query.password;
+
+    try {
+      const client = await pool.connect();
+      //const result = await client.query('SELECT password FROM users WHERE login = $1::text', username, (err, res) => {
+      const result = await client.query('SELECT password FROM users;', username, (err, res) => {
+
+        console.log("res: " + res);
+        
+        if (err) throw err;
+
+        if (res != null) {
+          return res;
+        }
+      });
+
+      if (result == password) {
+        res.render('pages/index');
+      } else {
+        console.log("Sorry, incorrect password");
+      }
+      
+      client.end();
+    } catch (err) {
+      console.error(err);
+      res.send("error " + err);
+    }
+  })
   .get('/db', async (req, res) => {
     try {
       const client = await pool.connect()
