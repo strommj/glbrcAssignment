@@ -19,7 +19,7 @@ express()
 
     try {
       const client = await pool.connect();
-      const result = await client.query("SELECT password FROM users WHERE login = '" + username + "'" (err, res) => {
+      const result = await client.query("SELECT password FROM users WHERE login = " + username, (err, res) => {
 
         console.log("res: " + res);
         
