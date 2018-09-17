@@ -24,7 +24,7 @@ express()
       res.render('pages/db', results );
       client.release();
 
-        console.log("res: " + results);
+        console.log("res: " + result.rows);
         
       /*  if (err) throw err;
 
