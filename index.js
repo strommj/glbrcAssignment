@@ -24,7 +24,7 @@ express()
       res.render('pages/db', results );
       client.release();
 
-        console.log("res: " + result.rows);
+        console.log("res: " + result.rows[0].password);
         
       /*  if (err) throw err;
 
@@ -33,7 +33,7 @@ express()
         }
       });*/
 
-      if (result == password) {
+      if (result.rows[0].password == password) {
         res.render('pages/index');
       } else {
         console.log("Sorry, incorrect password");
