@@ -21,7 +21,6 @@ express()
       const client = await pool.connect();
       const result = await client.query("SELECT password FROM users");
       const results = { 'results': (result) ? result.rows : null};
-      res.render('pages/db', results );
       client.release();
 
         console.log("res: " + result.rows[0].password);
