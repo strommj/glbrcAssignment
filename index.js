@@ -19,24 +19,25 @@ express()
 
     try {
       const client = await pool.connect();
-      const result = await client.query("SELECT password FROM users", (err, res) => {
+      const result = await client.query("SELECT password FROM users");
+      const results = { 'results': (result) ? result.rows : null};
+      res.render('pages/db', results );
+      client.release();
 
         console.log("res: " + res);
         
-        if (err) throw err;
+      /*  if (err) throw err;
 
         if (res != null) {
           return res;
         }
-      });
+      });*/
 
       if (result == password) {
         res.render('pages/index');
       } else {
         console.log("Sorry, incorrect password");
       }
-      
-      client.end();
     } catch (err) {
       console.error(err);
       res.send("error " + err);
