@@ -4,8 +4,10 @@ const path = require('path');
 const PORT = process.env.PORT || 5000;
 const { Pool } = require('pg');
 const pool = new Pool({
-  connectionString:process.env.DATABASE_URL,
-  ssl: true
+  connectionString: "postgres://postgres:wars923star@localhost:5432/mylocaldb",
+  ssl: false
+  //connectionString:process.env.DATABASE_URL,
+  //ssl: true
 });
 
 // Unauthorized users are redirected to the login screen
@@ -34,7 +36,6 @@ express()
     try {
       const client = await pool.connect();
       const result = await client.query("SELECT password FROM users WHERE login = $1", [req.session.user]);
-      const results = { 'results': (result) ? result.rows : null};
       client.release();
 
       if (result.rows[0].password == req.query.password) {
@@ -53,14 +54,24 @@ express()
 
   // Home page
   .get('/', authenticate, async (req, res) => {
-    /*try {
+    try {
+      const client = await pool.connect();
+      const result = await client.query("SELECT a.name " +
+                                        "FROM users AS u JOIN home_pages AS h " +
+                                        "ON u.user_id_pkey = h.user_id_fkey " +
+                                        "JOIN applications AS a " +
+                                        "ON h.app_id_fkey = a.app_id_pkey " +
+                                        "WHERE u.login = $1", [req.session.user]);
+      
+      console.log("name1: " + result.rows[0].name + " name2: " + result.rows[1].name);
+      const results = { 'results': (result) ? result.rows : null };
+      res.render('pages/home', results);
+      client.release();
 
     } catch (err) {
       console.error(err);
       res.send("error: " + err);
-    }*/
-
-    res.render('pages/home');
+    }
   })
 
   // Test database request
@@ -68,7 +79,7 @@ express()
     try {
       const client = await pool.connect()
       const result = await client.query('SELECT * FROM applications');
-      const results = { 'results': (result) ? result.rows : null};
+      const results = { 'results': (result) ? result.rows : null };
       res.render('pages/db', results );
       client.release();
     } catch (err) {
