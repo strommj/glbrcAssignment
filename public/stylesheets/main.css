@@ -11,3 +11,67 @@ input[type="text"], .loginForm {
   margin: 10px auto;
 }
 
+.appElement {
+  min-height: 100%;
+  height: 200px;
+  min-width: 100%;
+  width: 200px;
+  padding: 10px;
+  margin-bottom: 20px;
+  background: #eee;
+  border-radius: 5px;
+}
+
+.appElement:hover {
+  background: #b4b4b4;
+}
+
+.appElementLink {
+  text-decoration: none;
+  color: #2b2b2b
+}
+
+.appElementLink:focus, .appElementLink:hover{
+  text-decoration: none;
+  color: #2b2b2b
+}
+
+.appElement {
+  text-align: center;
+}
+
+.iconElement, p {
+  text-align: center;
+}
+
+.iconElement span {
+  font-size: 10em;
+  color: #ccc;
+}
+
+#changeAppsOverlay {
+  position: fixed; /* sit on top of the page content */
+  display: none;
+  width: 90%;
+  height: 90%;
+  padding-left: 20px;
+  padding-right: 20px;
+  top: 5%; 
+  left: 5%;
+  right: 0;
+  bottom: 0;
+  background: rgba(238, 238, 238, 0.98);
+  z-index: 1020;
+  border: 5px solid rgb(25, 151, 0);
+}
+
+.appSelection {
+  position: relative;
+  margin: 20px;
+  border: 1px solid black;
+}
+
+.form-check input {
+  margin: 10px;
+  display: inline-block;
+}

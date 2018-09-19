@@ -2,11 +2,24 @@
 <html>
 <head>
   <% include ../partials/header.ejs %>
+  <script type="text/javascript" src="/scripts/home.js"></script>
 </head>
 
 <body>
 
   <% include ../partials/nav.ejs %>
+
+<div class="container">
+
+  <div class="row">
+      <% if (usedAppList) { %>
+      <% usedAppList.forEach(function(r) { %>
+          <div class="col-md-3"><%- include('../partials/app.ejs', {appName: r.name}); %></div>
+      <% }); } %>
+
+      <div class="col-md-3"><% include ../partials/moreApps.ejs %></div>
+  </div>
+</div>
 
 <div class="jumbotron text-center">
   <div class="container">
@@ -19,19 +32,40 @@
     <a type="button" class="btn btn-lg btn-primary" href="https://github.com/heroku/node-js-getting-started"><span class="glyphicon glyphicon-download"></span> Source on GitHub</a>
   </div>
 </div>
-<div class="container">
-  <div class="alert alert-info text-center" role="alert">
-    To deploy your own copy, and learn the fundamentals of the Heroku platform, head over to the <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs" class="alert-link">Getting Started with Node on Heroku</a> tutorial.
-  </div>
-  <hr>
 
-  <ul>
-      <% results.forEach(function(r) { %>
-          <li><%= r.name %></li>
-      <% }); %>
-  </ul>
+<div id="changeAppsOverlay">
+  <h3>From our list of apps, please check the apps you would like to see on your home screen.</h2>
+  <form action="/updateHomeScreen" method="post">
+    <div class="appSelection">
+      <p>Select any of these apps you want to <strong>remove</strong> from your home screen</p>
+
+      <div class="form-check">
+        <% if (usedAppList) { %>
+        <% usedAppList.forEach(function(r) { %>
+          <div class="checkItem">
+              <input type="checkbox" id="app<%= r.name %>" class="form-check-input" name="del_<%= r.name %>">
+              <label for="app<%= r.name %>" class="form-check-label"><%= r.name %></label>
+          </div>
+        <% }); } %>
+      </div>
+    </div>
+
+    <div class="appSelection">
+      <p>Select any of these apps you want to <strong>add</strong> to your home screen</p>
+      <div class="form-check">
+          <% if (unusedAppList) { %>
+          <% unusedAppList.forEach(function(r) { %>
+            <div class="checkItem">
+                <input type="checkbox" id="app<%= r.name %>" class="form-check-input" name="add_<%= r.name %>">
+                <label for="app<%= r.name %>" class="form-check-label"><%= r.name %></label>
+            </div>
+          <% }); } %>
+      </div>
+    </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    
+  </form>
 </div>
-
 
 </body>
 </html>
