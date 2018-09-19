@@ -4,10 +4,8 @@ const path = require('path');
 const PORT = process.env.PORT || 5000;
 const { Pool } = require('pg');
 const pool = new Pool({
-  connectionString: "postgres://postgres:wars923star@localhost:5432/mylocaldb",
-  ssl: false
-  //connectionString:process.env.DATABASE_URL,
-  //ssl: true
+  connectionString:process.env.DATABASE_URL,
+  ssl: true
 });
 
 // Unauthorized users are redirected to the login screen
@@ -62,7 +60,7 @@ express()
 
       // This query grabs all applications that are currently in the user's home screen
       const usedApps = await client.query(
-        "SELECT a.name " +
+        "SELECT a.name, a.description, a.color, a.link " +
         "FROM users AS u JOIN home_pages AS h ON u.user_id_pkey = h.user_id_fkey " +
         "JOIN applications AS a ON h.app_id_fkey = a.app_id_pkey " +
         "WHERE u.login = $1", [req.session.user]);
@@ -89,6 +87,8 @@ express()
       res.send("error: " + err);
     }
   })
+
+  // Just in case anyone accidentally tries accessing this route, close off access to everyone
   .get('/updateHomeScreen', authenticate, (req,res) => {
     res.redirect('/');
   })
@@ -99,6 +99,7 @@ express()
       var removalList = [];
       var addList = [];
 
+      // Gather the list of applications to add and remove
       for (var key in req.body) {
 
         if (key.substring(0,4) == 'del_') {
@@ -139,6 +140,7 @@ express()
         await client.query("INSERT INTO home_pages VALUES " + values);
       }
   
+      // Reload the Home page with updated applications
       res.redirect('/');
       client.release();
 
@@ -149,17 +151,4 @@ express()
 
   })
 
-  // Test database request
-  .get('/db', authenticate, async (req, res) => {
-    try {
-      const client = await pool.connect();
-      const result = await client.query('SELECT * FROM applications');
-      const results = { 'results': (result) ? result.rows : null };
-      res.render('pages/db', results );
-      client.release();
-    } catch (err) {
-      console.error(err);
-      res.send("Error " + err);
-    }
-  })
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));

@@ -45,9 +45,16 @@ input[type="text"], .loginForm {
 }
 
 .iconElement span {
-  font-size: 10em;
+  font-size: 8em;
+  margin-bottom: 10px;
   color: #ccc;
 }
+
+.Red {background-color: #c70021}
+.Blue {background-color: #2330f0}
+.Yellow {background-color: #b8b100}
+.Green {background-color: #03f05e}
+.Purple {background-color: #a500c2}
 
 #changeAppsOverlay {
   position: fixed; /* sit on top of the page content */
@@ -74,4 +81,8 @@ input[type="text"], .loginForm {
 .form-check input {
   margin: 10px;
   display: inline-block;
+}
+
+.btn {
+  margin-right: 20px;
 }
