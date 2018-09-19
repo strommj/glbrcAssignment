@@ -53,6 +53,19 @@ express()
     }
   })
 
+  .get('/logout', authenticate, (req, res) => {
+    if (req.session) {
+      // Delete session
+      req.session.destroy(function(err) {
+        if (err) {
+          return next(err);
+        } else {
+          return res.redirect('/login');
+        }
+      });
+    }
+  })
+
   // Home page
   .get('/', authenticate, async (req, res) => {
     try {
